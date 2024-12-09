@@ -1,5 +1,6 @@
 services:
   homeassistant:
+    container_name: homeassistant
     image: 'ghcr.io/home-assistant/home-assistant:${HOME_ASSISTANT_IMAGE_VERSION:-stable}'
     # devices:
     # - '/dev/ttyUSB0:/dev/ttyUSB0'

@@ -3,6 +3,7 @@ networks:
 
 services:
   nextcloud:
+    container_name: nextcloud
     image: 'nextcloud:${NEXTCLOUD_IMAGE_VERSION:-latest}'
     depends_on:
       - 'nextcloud-db'
@@ -16,6 +17,7 @@ services:
       - '${HDD_DATA_DIRECTORY}/nextcloud:/var/www/html'
 
   nextcloud-db:
+    container_name: nextcloud-db
     image: 'mariadb'
     command: '--transaction-isolation=READ-COMMITTED --binlog-format=ROW'
     environment:

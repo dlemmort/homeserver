@@ -1,5 +1,6 @@
 services:
   watchtower:
+    container_name: watchtower
     image: 'containrrr/watchtower:${WATCHTOWER_IMAGE_VERSION:-latest}'
     environment:
       WATCHTOWER_CLEANUP: '${WATCHTOWER_CLEANUP:-true}'

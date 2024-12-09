@@ -49,7 +49,7 @@ services:
     container_name: collabora
     restart: unless-stopped
     networks: 
-      - cloud
+      - home
     environment:
       - PUID=1000
       - PGID=1000

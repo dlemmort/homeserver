@@ -26,5 +26,7 @@ services:
       - ./esphome/config:/config
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
+    ports:
+      - ${ESPHOME_PORT}:6052
     networks:
       - 'home' 

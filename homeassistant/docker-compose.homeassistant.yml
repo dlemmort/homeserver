@@ -18,3 +18,13 @@ services:
     volumes:
       - './config:/config'
       - '/etc/localtime:/etc/localtime:ro'
+
+  esphome:
+    container_name: esphome
+    image: esphome/esphome
+    volumes:
+      - ./esphome/config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    networks:
+      - 'home' 

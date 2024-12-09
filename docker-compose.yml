@@ -1,0 +1,7 @@
+version: '2'
+
+include:
+  - path: 'docker-compose.networks.yml'
+  - path: 'homeassistant/docker-compose.homeassistant.yml'
+  - path: 'watchtower/docker-compose.watchtower.yml'
+  - path: 'portainer/docker-compose.portainer.yml'

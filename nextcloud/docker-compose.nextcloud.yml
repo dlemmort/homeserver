@@ -1,0 +1,34 @@
+version: '2'
+
+networks:
+  nextcloud-internal: {}
+
+services:
+  nextcloud:
+    image: 'nextcloud:${NEXTCLOUD_IMAGE_VERSION:-latest}'
+    depends_on:
+      - 'nextcloud-db'
+    healthcheck:
+      test: ['CMD', 'curl', '0.0.0.0:80']
+    networks:
+      - 'home'
+      - 'nextcloud-internal'
+    restart: 'always'
+    volumes:
+      - './data:/var/www/html'
+
+  nextcloud-db:
+    image: 'mariadb'
+    command: '--transaction-isolation=READ-COMMITTED --binlog-format=ROW'
+    environment:
+      MYSQL_DATABASE: '${NEXTCLOUD_MYSQL_DATABASE:-nextcloud}'
+      MYSQL_PASSWORD: '${NEXTCLOUD_MYSQL_PASSWORD:-nextcloud}'
+      MYSQL_ROOT_PASSWORD: '${NEXTCLOUD_MYSQL_ROOT_PASSWORD:-pass}'
+      MYSQL_USER: '${NEXTCLOUD_MYSQL_USER:-nextcloud}'
+    healthcheck:
+      test: ['CMD', 'mysqlcheck', '--all-databases', '-ppass']
+    networks:
+      - 'nextcloud-internal'
+    restart: 'always'
+    volumes:
+      - './db:/var/lib/mysql'

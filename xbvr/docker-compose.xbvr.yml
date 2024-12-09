@@ -2,7 +2,9 @@ services:
   xbvr:
     image: ghcr.io/xbapps/xbvr:latest
     container_name: xbvr
-    restart: unless_stopped
+    restart: unless-stopped
+    ports:
+      - 9999:9999
     networks:
       - home
     volumes:

@@ -1,5 +1,3 @@
-version: '2'
-
 networks:
   nextcloud-internal: {}
 
@@ -15,7 +13,7 @@ services:
       - 'nextcloud-internal'
     restart: 'always'
     volumes:
-      - './data:/var/www/html'
+      - '${HDD_DATA_DIRECTORY}/nextcloud:/var/www/html'
 
   nextcloud-db:
     image: 'mariadb'

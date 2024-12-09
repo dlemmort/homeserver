@@ -1,6 +1,4 @@
-version: '2'
-
-service:
+services:
   homeassistant:
     image: 'ghcr.io/home-assistant/home-assistant:${HOME_ASSISTANT_IMAGE_VERSION:-stable}'
     # devices:

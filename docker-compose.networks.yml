@@ -1,2 +1,4 @@
 networks:
-  home: {}
+  home:
+    name: home
+    driver: bridge

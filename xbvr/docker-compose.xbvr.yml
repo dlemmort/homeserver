@@ -1,0 +1,9 @@
+services:
+  xbvr:
+    image: ghcr.io/xbapps/xbvr:latest
+    container_name: xbvr
+    restart: unless_stopped
+    network: home
+    volumes:
+      - ${HDD_DATA_DIRECTORY}/xbvr:/videos
+      - ./config:/root/.config/

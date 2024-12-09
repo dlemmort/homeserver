@@ -3,7 +3,8 @@ services:
     image: ghcr.io/xbapps/xbvr:latest
     container_name: xbvr
     restart: unless_stopped
-    network: home
+    networks:
+      - home
     volumes:
       - ${HDD_DATA_DIRECTORY}/xbvr:/videos
       - ./config:/root/.config/

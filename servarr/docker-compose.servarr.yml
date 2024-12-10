@@ -106,6 +106,7 @@ services:
   whisparr:
     image: ghcr.io/thespad/whisparr:latest
     container_name: whisparr
+    network_mode: "service:gluetun"
     environment:
       - PUID=1000
       - PGID=1000
@@ -113,6 +114,9 @@ services:
     volumes:
       - ./whisparr/config:/config
       - ${HDD_DATA_DIRECTORY}/xbvr/downloads:/downloads
+    depends_on:
+      gluetun:
+        condition: service_healthy
     restart: unless-stopped
 
   prowlarr:

@@ -113,8 +113,6 @@ services:
     volumes:
       - ./whisparr/config:/config
       - ${HDD_DATA_DIRECTORY}/xbvr/downloads:/downloads
-    ports:
-      - 6969:6969
     restart: unless-stopped
 
   prowlarr:

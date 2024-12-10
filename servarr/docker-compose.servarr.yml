@@ -19,6 +19,7 @@ services:
       - 4545:4545 # Requestrr
       - 6969:6969 # Whisparr
       - 9117:9117 # Jackett
+      - 8080:8080 # Sabnzbd
     volumes:
       - ./gluetun:/gluetun
     environment:
@@ -186,3 +187,21 @@ services:
     - ./jackett/config:/config
     - ${HDD_DATA_DIRECTORY}/servarr/jackett/downloads:/downloads
     restart: always
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+    volumes:
+      - ./sabnzbd/config:/config
+      - ${HDD_DATA_DIRECTORY}/servarr/sabnzbd:/Media
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      gluetun:
+        condition: service_healthy

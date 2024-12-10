@@ -1,7 +1,7 @@
 services:
   portainer:
     container_name: portainer
-    image: 'portainer/portainer'
+    image: 'portainer/portainer-ce'
     networks:
       - 'home'
     restart: 'unless-stopped'

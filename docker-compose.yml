@@ -6,3 +6,4 @@ include:
   - path: 'nextcloud/docker-compose.nextcloud.yml'
   - path: 'xbvr/docker-compose.xbvr.yml'
   - path: 'servarr/docker-compose.servarr.yml'
+  - path: 'adguard/docker-compose.adguardhome.yml'

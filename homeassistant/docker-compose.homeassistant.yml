@@ -30,3 +30,13 @@ services:
       - ${ESPHOME_PORT}:6052
     networks:
       - 'home' 
+
+  node-red:
+    image: nodered/node-red:latest
+    container_name: node-red
+    environment:
+      - TZ=${TZ}
+    ports:
+      - "1880:1880"
+    volumes:
+      - ./nodered:/data

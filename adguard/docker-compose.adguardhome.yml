@@ -22,12 +22,12 @@ services:
 
 networks:
   dockervlan:
-  name: dockervlan
-  driver: macvlan
-  driver_opts:
-    parent: enp0s31f6
-  ipam:
-    config:
-      - subnet: "192.168.154.0/24"
-        ip_range: "192.168.1.225/32"
-        gateway: "192.168.154.1"
+    name: dockervlan
+    driver: macvlan
+    driver_opts:
+      parent: enp0s31f6
+    ipam:
+      config:
+        - subnet: "192.168.154.0/24"
+          ip_range: "192.168.1.225/32"
+          gateway: "192.168.154.1"

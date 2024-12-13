@@ -225,47 +225,43 @@ services:
         condition: service_healthy
 
   spotweb:
-    image: erikdevries/spotweb
+    image: jgeusebroek/spotweb
     container_name: spotweb
-    environment:
-      - TZ=${TZ} #CHANGE_TO_YOUR_TZ
-      - DB_PORT=3306
-      - DB_HOST=spotweb_db
-      - DB_NAME=spotweb
-      - DB_USER=spotweb #username from line 32
-      - DB_PASS=spotweb #password from line 33
-      - CRON_INTERVAL=*/5 * * * *
+    restart: unless-stopped
     network_mode: service:gluetun
+    environment:
+      - PUID=1000
+      - GUID=1000
+      - TZ=Europe/Amsterdam
+      - SPOTWEB_DB_TYPE=pdo_mysql
+      - SPOTWEB_DB_HOST=spotweb_db
+      - SPOTWEB_DB_PORT=3306
+      - SPOTWEB_DB_NAME=spotweb
+      - SPOTWEB_DB_USER=spotweb
+      - SPOTWEB_DB_PASS=spotweb
+      - "SPOTWEB_CRON_RETRIEVE=* */2 * * *"
     depends_on:
-      spotweb_db:
-        condition: service_healthy
-      gluetun:
-        condition: service_healthy
-    security_opt:
-      - no-new-privileges:true
-    restart: always
+      - spotweb_db
+      - gluetun:
+          condition: service_healthy
+    volumes:
+      - ./spotweb/config:/config
 
   spotweb_db:
-    image: linuxserver/mariadb:latest
-    container_name: spotweb_db
-    environment:
-      - MYSQL_ROOT_PASSWORD=StRoNgPa55WoRd
-      - PUID=1000 #CHANGE_TO_YOUR_UID
-      - PGID=1000 #CHANGE_TO_YOUR_GID
-      - TZ=${TZ} #CHANGE_TO_YOUR_TZ
-      - MYSQL_DATABASE=spotweb
-      - MYSQL_USER=spotweb #A username
-      - MYSQL_PASSWORD=spotweb # Another database password
-    volumes:
-      - ./spotweb/spotweb-mariadb:/config
+    image: linuxserver/mariadb
+    container_name: spotwebdb
+    restart: unless-stopped
     network_mode: service:gluetun
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h"]
-      timeout: 20s
-      retries: 10
-    security_opt:
-      - no-new-privileges:true
-    restart: always
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_ROOT_PASSWORD=spotweb
+      - TZ=Europe/Amsterdam
+      - MYSQL_DATABASE=spotweb
+      - MYSQL_USER=spotweb
+      - MYSQL_PASSWORD=spotweb
+    volumes:
+      - ./spotweb/mariadb:/config
     depends_on:
       gluetun:
         condition: service_healthy

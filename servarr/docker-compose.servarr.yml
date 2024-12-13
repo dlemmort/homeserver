@@ -150,6 +150,20 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    network_mode: "service:gluetun"
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=${TZ}
+    volumes:
+      - /path/to/appdata/config:/app/config
+    restart: unless-stopped
+    depends_on:
+      gluetun:
+        condition: service_healthy
+
   requestrr:
     image: darkalfx/requestrr
     container_name: requestrr

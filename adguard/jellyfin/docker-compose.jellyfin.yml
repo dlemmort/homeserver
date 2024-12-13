@@ -1,0 +1,14 @@
+services:
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    networks:
+      - 'home' 
+    volumes:
+      - ./jellyfin:/config
+      - /home/daan/data/Media:/data/media
+    restart: 'unless-stopped'
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}

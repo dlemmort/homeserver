@@ -136,20 +136,6 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
-  overseerr:
-    image: sctx/overseerr:latest
-    container_name: overseerr
-    network_mode: "service:gluetun"
-    environment:
-      - LOG_LEVEL=debug
-      - TZ=${TZ}
-    volumes:
-      - ./overseerr/config:/app/config
-    depends_on:
-      gluetun:
-        condition: service_healthy
-    restart: unless-stopped
-
   jellyseerr:
     image: fallenbagel/jellyseerr:latest
     container_name: jellyseerr
@@ -158,7 +144,7 @@ services:
       - LOG_LEVEL=debug
       - TZ=${TZ}
     volumes:
-      - /path/to/appdata/config:/app/config
+      - ./jellyseer:/app/config
     restart: unless-stopped
     depends_on:
       gluetun:

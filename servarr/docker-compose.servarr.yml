@@ -259,6 +259,10 @@ services:
     volumes:
       - ./spotweb/spotweb-mariadb:/config
     network_mode: service:gluetun
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h"]
+      timeout: 20s
+      retries: 10
     security_opt:
       - no-new-privileges:true
     restart: always

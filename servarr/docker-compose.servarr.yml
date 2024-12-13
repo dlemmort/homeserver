@@ -241,9 +241,9 @@ services:
       - SPOTWEB_DB_PASS=spotweb
       - "SPOTWEB_CRON_RETRIEVE=* */2 * * *"
     depends_on:
-      - spotweb_db
-      - gluetun:
-          condition: service_healthy
+      spotweb_db:
+      gluetun:
+        condition: service_healthy
     volumes:
       - ./spotweb/config:/config
 

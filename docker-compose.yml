@@ -7,4 +7,3 @@ include:
   - path: 'xbvr/docker-compose.xbvr.yml'
   - path: 'servarr/docker-compose.servarr.yml'
   - path: 'adguard/docker-compose.adguardhome.yml'
-  - path: 'jellyfin/docker-compose.jellyfin.yml'

@@ -222,3 +222,49 @@ services:
     depends_on:
       gluetun:
         condition: service_healthy
+
+  spotweb:
+    image: erikdevries/spotweb
+    container_name: spotweb
+    environment:
+      - TZ=${TZ} #CHANGE_TO_YOUR_TZ
+      - DB_PORT=3306
+      - DB_HOST=spotweb_db
+      - DB_NAME=spotweb
+      - DB_USER=spotweb #username from line 32
+      - DB_PASS=spotweb #password from line 33
+      - CRON_INTERVAL=*/5 * * * *
+    network_mode: service:gluetun
+    depends_on:
+      spotweb_db:
+        condition: service_healthy
+      gluetun:
+        condition: service_healthy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+
+  spotweb_db:
+    image: linuxserver/mariadb:latest
+    container_name: spotweb_db
+    environment:
+      - MYSQL_ROOT_PASSWORD=StRoNgPa55WoRd
+      - PUID=1000 #CHANGE_TO_YOUR_UID
+      - PGID=1000 #CHANGE_TO_YOUR_GID
+      - TZ=${TZ} #CHANGE_TO_YOUR_TZ
+      - MYSQL_DATABASE=spotweb
+      - MYSQL_USER=spotweb #A username
+      - MYSQL_PASSWORD=spotweb # Another database password
+    volumes:
+      - ./spotweb/spotweb-mariadb:/config
+    network_mode: service:gluetun
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "spotweb_db"]
+      timeout: 20s
+      retries: 10
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    depends_on:
+      gluetun:
+        condition: service_healthy

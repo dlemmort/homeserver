@@ -51,7 +51,10 @@ services:
       - UMASK=022
     volumes:
       - ./qbittorrent/config:/config
-      - ${HDD_DATA_DIRECTORY}/servarr/qbittorrent/torrents:/Media/Torrents
+      - ${HDD_DATA_DIRECTORY}/Media/Series/Downloads:/Downloads/Series
+      - ${HDD_DATA_DIRECTORY}/Media/Movies/Downloads:/Downloads/Movies
+      - ${HDD_DATA_DIRECTORY}/Media/Music/Downloads:/Downloads/Music
+      - ${HDD_DATA_DIRECTORY}/xbvr/Downloads:/xbvr
     depends_on:
       gluetun:
         condition: service_healthy
@@ -77,8 +80,6 @@ services:
     volumes:
       - ./sonarr/config:/config
       - ${HDD_DATA_DIRECTORY}/Media/Series:/Media
-      - ${HDD_DATA_DIRECTORY}/servarr/sabnzbd:/Sabnzbd
-      - ${HDD_DATA_DIRECTORY}/servarr/qbittorrent/torrents/Complete:/Qbittorrent
     depends_on:
       gluetun:
         condition: service_healthy
@@ -102,8 +103,6 @@ services:
     volumes:
       - ./radarr/config:/config
       - ${HDD_DATA_DIRECTORY}/Media/Movies:/Media
-      - ${HDD_DATA_DIRECTORY}/servarr/sabnzbd:/Sabnzbd
-      - ${HDD_DATA_DIRECTORY}/servarr/qbittorrent/torrents/Complete:/Qbittorrent
     depends_on:
       gluetun:
         condition: service_healthy
@@ -129,8 +128,6 @@ services:
     volumes:
       - ./lidarr/config:/config
       - ${HDD_DATA_DIRECTORY}/Media/Music:/Media
-      - ${HDD_DATA_DIRECTORY}/servarr/sabnzbd:/Sabnzbd
-      - ${HDD_DATA_DIRECTORY}/servarr/qbittorrent/torrents/Complete:/Qbittorrent
     depends_on:
       gluetun:
         condition: service_healthy
@@ -155,9 +152,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ./whisparr/config:/config
-      - ${HDD_DATA_DIRECTORY}/xbvr/downloads:/downloads
-      - ${HDD_DATA_DIRECTORY}/servarr/sabnzbd:/Sabnzbd
-      - ${HDD_DATA_DIRECTORY}/servarr/qbittorrent/torrents/Complete:/Qbittorrent
+      - ${HDD_DATA_DIRECTORY}/xbvr:/xbvr
     depends_on:
       gluetun:
         condition: service_healthy
@@ -294,7 +289,10 @@ services:
       - TZ=${TZ}
     volumes:
       - ./sabnzbd/config:/config
-      - ${HDD_DATA_DIRECTORY}/servarr/sabnzbd:/Media
+      - ${HDD_DATA_DIRECTORY}/Media/Series/Downloads:/Downloads/Series
+      - ${HDD_DATA_DIRECTORY}/Media/Movies/Downloads:/Downloads/Movies
+      - ${HDD_DATA_DIRECTORY}/Media/Music/Downloads:/Downloads/Music
+      - ${HDD_DATA_DIRECTORY}/xbvr/Downloads:/xbvr
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true #For security

@@ -290,8 +290,6 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true #For security
-    security_opt:
-      - no-new-privileges:true
     depends_on:
       gluetun:
         condition: service_healthy

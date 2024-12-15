@@ -77,6 +77,8 @@ services:
     volumes:
       - ./sonarr/config:/config
       - ${HDD_DATA_DIRECTORY}/Media/Series:/Media
+      - ${HDD_DATA_DIRECTORY}/servarr/sabnzbd:/Sabnzbd
+      - ${HDD_DATA_DIRECTORY}/servarr/qbittorrent/torrents/Complete:/Qbittorrent
     depends_on:
       gluetun:
         condition: service_healthy
@@ -100,6 +102,8 @@ services:
     volumes:
       - ./radarr/config:/config
       - ${HDD_DATA_DIRECTORY}/Media/Movies:/Media
+      - ${HDD_DATA_DIRECTORY}/servarr/sabnzbd:/Sabnzbd
+      - ${HDD_DATA_DIRECTORY}/servarr/qbittorrent/torrents/Complete:/Qbittorrent
     depends_on:
       gluetun:
         condition: service_healthy
@@ -125,6 +129,8 @@ services:
     volumes:
       - ./lidarr/config:/config
       - ${HDD_DATA_DIRECTORY}/Media/Music:/Media
+      - ${HDD_DATA_DIRECTORY}/servarr/sabnzbd:/Sabnzbd
+      - ${HDD_DATA_DIRECTORY}/servarr/qbittorrent/torrents/Complete:/Qbittorrent
     depends_on:
       gluetun:
         condition: service_healthy
@@ -150,6 +156,8 @@ services:
     volumes:
       - ./whisparr/config:/config
       - ${HDD_DATA_DIRECTORY}/xbvr/downloads:/downloads
+      - ${HDD_DATA_DIRECTORY}/servarr/sabnzbd:/Sabnzbd
+      - ${HDD_DATA_DIRECTORY}/servarr/qbittorrent/torrents/Complete:/Qbittorrent
     depends_on:
       gluetun:
         condition: service_healthy
@@ -340,6 +348,8 @@ services:
     depends_on:
       spot_db:
         condition: service_healthy
+    volumes:
+      - ${HDD_DATA_DIRECTORY}/servarr/sabnzbd/nzb:/Nzbs
     restart: always
     network_mode: service:gluetun
     healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
@@ -371,8 +381,6 @@ services:
       retries: 1
     labels: # Traefik labels added via glueten
       - "deunhealth.restart.on.unhealthy=true"
-
-
 
   deunhealth:
     image: qmcgaw/deunhealth

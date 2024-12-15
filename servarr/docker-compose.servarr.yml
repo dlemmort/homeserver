@@ -21,7 +21,7 @@ services:
       - 9117:9117 # Jackett
       - 8080:8080 # Sabnzbd
       - 8096:8096 # Jellyfin
-      - 8083:80
+      - 8083:80 #Spotweb
     volumes:
       - ./gluetun:/gluetun
     environment:
@@ -58,6 +58,13 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: always
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -74,6 +81,13 @@ services:
       gluetun:
         condition: service_healthy
     restart: unless-stopped
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -90,6 +104,15 @@ services:
       gluetun:
         condition: service_healthy
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true #For security
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
 
   lidarr:
     image: lscr.io/linuxserver/lidarr:latest
@@ -105,7 +128,16 @@ services:
     depends_on:
       gluetun:
         condition: service_healthy
+    security_opt:
+      - no-new-privileges:true #For security
     restart: unless-stopped
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
 
   whisparr:
     image: ghcr.io/thespad/whisparr:latest
@@ -121,7 +153,16 @@ services:
     depends_on:
       gluetun:
         condition: service_healthy
+    security_opt:
+      - no-new-privileges:true #For security
     restart: unless-stopped
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
 
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
@@ -133,10 +174,19 @@ services:
       - TZ=${TZ}
     volumes:
       - ./prowlarr/config:/config
+    security_opt:
+      - no-new-privileges:true #For security
     depends_on:
       gluetun:
         condition: service_healthy
     restart: unless-stopped
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
 
   jellyseerr:
     image: fallenbagel/jellyseerr:latest
@@ -151,6 +201,15 @@ services:
     depends_on:
       gluetun:
         condition: service_healthy
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    security_opt:
+      - no-new-privileges:true #For security
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
 
   requestrr:
     image: darkalfx/requestrr
@@ -162,6 +221,15 @@ services:
       gluetun:
         condition: service_healthy
     restart: unless-stopped
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    security_opt:
+      - no-new-privileges:true #For security
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
 
   tautulli:
     image: ghcr.io/tautulli/tautulli
@@ -174,9 +242,18 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=${TZ}
+    security_opt:
+      - no-new-privileges:true #For security
     depends_on: #use this if you use GlueTUN for VPN
       gluetun:
         condition: service_healthy
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
 
   jackett:
     image: linuxserver/jackett:latest
@@ -189,6 +266,15 @@ services:
     - ./jackett/config:/config
     - ${HDD_DATA_DIRECTORY}/servarr/jackett/downloads:/downloads
     restart: always
+    security_opt:
+      - no-new-privileges:true #For security
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
 
   sabnzbd:
     image: lscr.io/linuxserver/sabnzbd:latest
@@ -203,10 +289,19 @@ services:
       - ${HDD_DATA_DIRECTORY}/servarr/sabnzbd:/Media
     restart: unless-stopped
     security_opt:
+      - no-new-privileges:true #For security
+    security_opt:
       - no-new-privileges:true
     depends_on:
       gluetun:
         condition: service_healthy
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
 
   jellyfin:
     image: jellyfin/jellyfin
@@ -216,6 +311,8 @@ services:
       - ./jellyfin:/config
       - /home/daan/data/Media:/data/media
     restart: 'unless-stopped'
+    security_opt:
+      - no-new-privileges:true #For security
     environment:
       - PUID=1000
       - PGID=1000
@@ -223,3 +320,73 @@ services:
     depends_on:
       gluetun:
         condition: service_healthy
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
+
+  spot:
+    image: erikdevries/spotweb
+    container_name: spotweb
+    environment:
+      - TZ=Europe/Amsterdam #CHANGE_TO_YOUR_TZ
+      - DB_PORT=3306
+      - DB_HOST=spot_db
+      - DB_NAME=spotweb
+      - DB_USER=spotweb #username from line 32
+      - DB_PASS=spotweb #password from line 33
+      - CRON_INTERVAL=*/5 * * * *
+    depends_on:
+      spotweb_db:
+        condition: service_healthy
+    restart: always
+    network_mode: service:gluetun
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
+
+  spot_db:
+    image: linuxserver/mariadb:latest
+    container_name: spotweb_db
+    network_mode: service:gluetun
+    environment:
+      - MYSQL_ROOT_PASSWORD=StRoNgPa55WoRd
+      - PUID=1000 #CHANGE_TO_YOUR_UID
+      - PGID=1000 #CHANGE_TO_YOUR_GID
+      - TZ=Europe/Amsterdam #CHANGE_TO_YOUR_TZ
+      - MYSQL_DATABASE=spotweb
+      - MYSQL_USER=spotweb #A username
+      - MYSQL_PASSWORD=spotweb # Another database password
+    volumes:
+      - ./spotweb-mariadb:/config
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
+
+
+
+  deunhealth:
+    image: qmcgaw/deunhealth
+    container_name: deunhealth
+    restart: unless-stopped
+    profiles: ["apps", "all"]    
+    security_opt:
+      - no-new-privileges:true #For security
+    networks:
+      - socket_proxy
+    environment:
+      LOG_LEVEL: info
+      HEALTH_SERVER_ADDRESS: 127.0.0.1:9999
+      TZ: $TZ
+      DOCKER_HOST: tcp://socket-proxy:2375

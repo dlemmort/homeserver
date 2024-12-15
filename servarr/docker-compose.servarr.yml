@@ -332,7 +332,7 @@ services:
     environment:
       - TZ=Europe/Amsterdam #CHANGE_TO_YOUR_TZ
       - DB_PORT=3306
-      - DB_HOST=spot_db
+      - DB_HOST=172.21.0.8
       - DB_NAME=spotweb
       - DB_USER=spotweb #username from line 32
       - DB_PASS=spotweb #password from line 33

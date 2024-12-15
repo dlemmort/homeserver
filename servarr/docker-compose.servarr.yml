@@ -330,7 +330,7 @@ services:
 
   spot:
     image: erikdevries/spotweb
-    container_name: spotweb
+    container_name: spot
     environment:
       - TZ=Europe/Amsterdam #CHANGE_TO_YOUR_TZ
       - DB_PORT=3306
@@ -354,7 +354,7 @@ services:
 
   spot_db:
     image: linuxserver/mariadb:latest
-    container_name: spotweb_db
+    container_name: spot_db
     network_mode: service:gluetun
     environment:
       - MYSQL_ROOT_PASSWORD=StRoNgPa55WoRd

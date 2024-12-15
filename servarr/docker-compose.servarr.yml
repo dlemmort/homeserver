@@ -51,9 +51,7 @@ services:
       - UMASK=022
     volumes:
       - ./qbittorrent/config:/config
-      - ${HDD_DATA_DIRECTORY}/Media/Series/Downloads:/Downloads/Series
-      - ${HDD_DATA_DIRECTORY}/Media/Movies/Downloads:/Downloads/Movies
-      - ${HDD_DATA_DIRECTORY}/Media/Music/Downloads:/Downloads/Music
+      - ${HDD_DATA_DIRECTORY}/Media/Series/Downloads:/Downloads
       - ${HDD_DATA_DIRECTORY}/xbvr/Downloads:/xbvr
     depends_on:
       gluetun:
@@ -79,7 +77,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ./sonarr/config:/config
-      - ${HDD_DATA_DIRECTORY}/Media/Series:/Media
+      - ${HDD_DATA_DIRECTORY}/Media:/Media
     depends_on:
       gluetun:
         condition: service_healthy
@@ -102,7 +100,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ./radarr/config:/config
-      - ${HDD_DATA_DIRECTORY}/Media/Movies:/Media
+      - ${HDD_DATA_DIRECTORY}/Media:/Media
     depends_on:
       gluetun:
         condition: service_healthy
@@ -127,7 +125,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ./lidarr/config:/config
-      - ${HDD_DATA_DIRECTORY}/Media/Music:/Media
+      - ${HDD_DATA_DIRECTORY}/Media:/Media
     depends_on:
       gluetun:
         condition: service_healthy
@@ -152,7 +150,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ./whisparr/config:/config
-      - ${HDD_DATA_DIRECTORY}/xbvr:/xbvr
+      - ${HDD_DATA_DIRECTORY}/Media:/Media
     depends_on:
       gluetun:
         condition: service_healthy
@@ -289,10 +287,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ./sabnzbd/config:/config
-      - ${HDD_DATA_DIRECTORY}/Media/Series/Downloads:/Downloads/Series
-      - ${HDD_DATA_DIRECTORY}/Media/Movies/Downloads:/Downloads/Movies
-      - ${HDD_DATA_DIRECTORY}/Media/Music/Downloads:/Downloads/Music
-      - ${HDD_DATA_DIRECTORY}/xbvr/Downloads:/xbvr
+      - ${HDD_DATA_DIRECTORY}/Media/Series/Downloads:/Downloads
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true #For security

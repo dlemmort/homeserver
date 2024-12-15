@@ -338,7 +338,7 @@ services:
       - DB_PASS=spotweb #password from line 33
       - CRON_INTERVAL=*/5 * * * *
     depends_on:
-      spotweb_db:
+      spot_db:
         condition: service_healthy
     restart: always
     network_mode: service:gluetun

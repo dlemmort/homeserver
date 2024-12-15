@@ -51,8 +51,7 @@ services:
       - UMASK=022
     volumes:
       - ./qbittorrent/config:/config
-      - ${HDD_DATA_DIRECTORY}/Media/Series/Downloads:/Downloads
-      - ${HDD_DATA_DIRECTORY}/xbvr/Downloads:/xbvr
+      - ${HDD_DATA_DIRECTORY}/Media/Torrents:/Media/Torrents
     depends_on:
       gluetun:
         condition: service_healthy
@@ -287,7 +286,8 @@ services:
       - TZ=${TZ}
     volumes:
       - ./sabnzbd/config:/config
-      - ${HDD_DATA_DIRECTORY}/Media/Series/Downloads:/Downloads
+      - ./sabnzbd/nzb:/nzb
+      - ${HDD_DATA_DIRECTORY}/Media/Usenet:/Media/Usenet
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true #For security
@@ -308,7 +308,7 @@ services:
     network_mode: service:gluetun
     volumes:
       - ./jellyfin:/config
-      - /home/daan/data/Media:/data/media
+      - /home/daan/data/Media/Media:/Media
     restart: 'unless-stopped'
     security_opt:
       - no-new-privileges:true #For security
@@ -342,7 +342,7 @@ services:
       spot_db:
         condition: service_healthy
     volumes:
-      - ${HDD_DATA_DIRECTORY}/servarr/sabnzbd/nzb:/Nzbs
+      - ./sabnzbd/nzb:/nzb  
     restart: always
     network_mode: service:gluetun
     healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220

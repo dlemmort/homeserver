@@ -1,3 +1,7 @@
+env_file:
+  - ../.env
+  - .env
+
 services:
 ###########################################################################
 ###########################################################################
@@ -59,7 +63,7 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
-      - ${FOLDER_FOR_DATA:?err}/tailscale:/var/lib/tailscale
+      - ${FOLDER_FOR_CONFIG:?err}/tailscale:/var/lib/tailscale
     environment:
       - TS_USERSPACE=false
       - TS_STATE_DIR=/var/lib/tailscale
@@ -86,9 +90,9 @@ services:
       - ${WEBUI_PORT_HEADPLANE:?err}:3000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${FOLDER_FOR_DATA:?err}/headscale:/etc/headscale
-      - ${FOLDER_FOR_DATA:?err}/headplane:/etc/headplane
-      - ${FOLDER_FOR_DATA:?err}/headplane/data:/var/lib/headplane
+      - ${FOLDER_FOR_CONFIG:?err}/headscale:/etc/headscale
+      - ${FOLDER_FOR_CONFIG:?err}/headplane:/etc/headplane
+      - ${FOLDER_FOR_CONFIG:?err}/headplane/data:/var/lib/headplane
     environment:
       - TZ=${TIMEZONE:?err}
     labels:
@@ -119,7 +123,7 @@ services:
     restart: always
     user: ${PUID:?err}:${PGID:?err}
     volumes:
-      - ${FOLDER_FOR_DATA:?err}/ddns-updater:/updater/data
+      - ${FOLDER_FOR_CONFIG:?err}/ddns-updater:/updater/data
     ports:
       - ${WEBUI_PORT_DDNS_UPDATER:?err}:${WEBUI_PORT_DDNS_UPDATER:?err}/tcp
     environment:
@@ -186,9 +190,9 @@ services:
       - ${METRICS_PORT_TRAEFIK:?err}:8082
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${FOLDER_FOR_DATA:?err}/logs/traefik:/var/log
-      - ${FOLDER_FOR_DATA:?err}/traefik:/etc/traefik
-      - ${FOLDER_FOR_DATA:?err}/traefik/letsencrypt:/letsencrypt
+      - ${FOLDER_FOR_CONFIG:?err}/logs/traefik:/var/log
+      - ${FOLDER_FOR_CONFIG:?err}/traefik:/etc/traefik
+      - ${FOLDER_FOR_CONFIG:?err}/traefik/letsencrypt:/letsencrypt
     labels:
       - traefik.enable=true
     # ROUTERS
@@ -226,8 +230,8 @@ services:
       && traefik-certs-dumper file --version v2 --watch
       --source /data/acme.json --dest /certs'
     volumes:
-      - ${FOLDER_FOR_DATA:?err}/traefik/letsencrypt:/data:ro
-      - ${FOLDER_FOR_DATA:?err}/traefik-certs-dumper:/certs
+      - ${FOLDER_FOR_CONFIG:?err}/traefik/letsencrypt:/data:ro
+      - ${FOLDER_FOR_CONFIG:?err}/traefik-certs-dumper:/certs
 
 networks:
   mediastack:

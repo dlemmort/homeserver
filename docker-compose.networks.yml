@@ -1,4 +1,0 @@
-networks:
-  home:
-    name: home
-    driver: bridge

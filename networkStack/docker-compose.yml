@@ -1,0 +1,234 @@
+services:
+###########################################################################
+###########################################################################
+##
+##  Docker Compose File: Headscale
+##  Function: OpenSource Tailscale Coordination Server
+##
+##  Documentation: https://headscale.net/stable/
+##
+###########################################################################
+###########################################################################
+  headscale:
+    image: headscale/headscale:latest
+    container_name: headscale
+    restart: unless-stopped
+    networks:
+      - mediastack
+    command: serve
+    ports:
+      - ${CONNECT_PORT_HEADSCALE:?err}:8080
+      - ${METRICS_PORT_HEADSCALE:?err}:9090
+    volumes:
+      - ${FOLDER_FOR_DATA:?err}/headscale:/etc/headscale
+      - ${FOLDER_FOR_DATA:?err}/headscale/data:/var/lib/headscale
+    environment:
+      - TZ=${TIMEZONE:?err}
+    labels:
+      - traefik.enable=true
+    # ROUTERS
+      - traefik.http.routers.headscale.service=headscale
+      - traefik.http.routers.headscale.rule=Host(`headscale.${CLOUDFLARE_DNS_ZONE:?err}`)
+      - traefik.http.routers.headscale.entrypoints=secureweb
+      - traefik.http.routers.headscale.middlewares=security-headers@file,traefik-bouncer@file
+      # Do not add authentik-forwardauth@file to middlewares, otherwise Tailscale clients can't authenticate and connect
+    # SERVICES
+      - traefik.http.services.headscale.loadbalancer.server.scheme=http
+      - traefik.http.services.headscale.loadbalancer.server.port=8080
+    # MIDDLEWARES
+
+###########################################################################
+###########################################################################
+##
+##  Docker Compose File: Tailscale
+##  Function: Tailscale Client - Operating as Tailnet Exit-Node
+##
+##  Documentation: https://headscale.net/stable/
+##
+###########################################################################
+###########################################################################
+  tailscale:
+    image: tailscale/tailscale:latest
+    hostname: tailscale
+    container_name: tailscale
+    restart: unless-stopped
+    networks:
+      - mediastack
+    cap_add:
+      - net_admin
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - ${FOLDER_FOR_DATA:?err}/tailscale:/var/lib/tailscale
+    environment:
+      - TS_USERSPACE=false
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_AUTHKEY=${TAILSCALE_AUTHKEY:?err}
+      - TS_EXTRA_ARGS=--hostname=exit-node --advertise-exit-node --advertise-routes=${LOCAL_SUBNET:?err},${DOCKER_SUBNET:?err} --login-server=https://headscale.${CLOUDFLARE_DNS_ZONE:?err}
+
+###########################################################################
+###########################################################################
+##
+##  Docker Compose File: Headplane
+##  Function: WebUI Management for Headscale Coordination Server
+##
+##  Documentation: https://github.com/tale/headplane
+##
+###########################################################################
+###########################################################################
+  headplane:
+    image: ghcr.io/tale/headplane:latest
+    container_name: headplane
+    restart: unless-stopped
+    networks:
+      - mediastack
+    ports:
+      - ${WEBUI_PORT_HEADPLANE:?err}:3000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${FOLDER_FOR_DATA:?err}/headscale:/etc/headscale
+      - ${FOLDER_FOR_DATA:?err}/headplane:/etc/headplane
+      - ${FOLDER_FOR_DATA:?err}/headplane/data:/var/lib/headplane
+    environment:
+      - TZ=${TIMEZONE:?err}
+    labels:
+      - traefik.enable=true
+    # ROUTERS
+      - traefik.http.routers.headplane.service=headplane
+      - traefik.http.routers.headplane.rule=Host(`headplane.${CLOUDFLARE_DNS_ZONE:?err}`) && PathPrefix(`/admin/`)
+      - traefik.http.routers.headplane.entrypoints=secureweb
+      - traefik.http.routers.headplane.middlewares=authentik-forwardauth@file,security-headers@file,traefik-bouncer@file
+    # SERVICES
+      - traefik.http.services.headplane.loadbalancer.server.scheme=http
+      - traefik.http.services.headplane.loadbalancer.server.port=3000
+    # MIDDLEWARES
+
+###########################################################################
+###########################################################################
+##
+##  Docker Compose File: DDNS-Updater (qmcgaw)
+##  Function: Update Dynamic IP addresses for DNS A and/or AAAA records
+##
+##  Documentation: https://hub.docker.com/r/qmcgaw/ddns-updater
+##
+###########################################################################
+###########################################################################
+  ddns-updater:
+    image: qmcgaw/ddns-updater:latest
+    container_name: ddns-updater
+    restart: always
+    user: ${PUID:?err}:${PGID:?err}
+    volumes:
+      - ${FOLDER_FOR_DATA:?err}/ddns-updater:/updater/data
+    ports:
+      - ${WEBUI_PORT_DDNS_UPDATER:?err}:${WEBUI_PORT_DDNS_UPDATER:?err}/tcp
+    environment:
+      - UMASK=${UMASK:?err}
+      - TZ=${TIMEZONE:?err}
+      - CONFIG=
+      - PERIOD=5m
+      - UPDATE_COOLDOWN_PERIOD=5m
+      - PUBLICIP_FETCHERS=all
+      - PUBLICIP_HTTP_PROVIDERS=all
+      - PUBLICIPV4_HTTP_PROVIDERS=all
+      - PUBLICIPV6_HTTP_PROVIDERS=all
+      - PUBLICIP_DNS_PROVIDERS=all
+      - PUBLICIP_DNS_TIMEOUT=3s
+      - HTTP_TIMEOUT=10s
+      # Web UI
+      - LISTENING_ADDRESS=:${WEBUI_PORT_DDNS_UPDATER:?err}
+      - ROOT_URL=/
+      # Backup
+      - BACKUP_PERIOD=0 # 0 to disable
+      - BACKUP_DIRECTORY=/updater/data
+      # Other
+      - LOG_LEVEL=info
+      - LOG_CALLER=hidden
+      - SHOUTRRR_ADDRESSES=
+    networks:
+      - mediastack
+    labels:
+      - traefik.enable=true
+    # ROUTERS
+      - traefik.http.routers.ddns-updater.service=ddns-updater
+      - traefik.http.routers.ddns-updater.rule=Host(`ddns-updater.${CLOUDFLARE_DNS_ZONE:?err}`)
+      - traefik.http.routers.ddns-updater.entrypoints=secureweb
+      - traefik.http.routers.ddns-updater.middlewares=authentik-forwardauth@file,security-headers@file,traefik-bouncer@file
+    # SERVICES
+      - traefik.http.services.ddns-updater.loadbalancer.server.scheme=http
+      - traefik.http.services.ddns-updater.loadbalancer.server.port=${WEBUI_PORT_DDNS_UPDATER:?err}
+    # MIDDLEWARES
+
+###########################################################################
+###########################################################################
+##
+##  Docker Compose File: Traefik
+##  Function: Reverse Proxy Routing Server
+##
+##  Documentation: https://doc.traefik.io/traefik/
+##
+###########################################################################
+###########################################################################
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    networks:
+      - mediastack
+    user: root
+    environment:
+      - TZ=${TIMEZONE:?err}
+      - CF_DNS_API_TOKEN=${CLOUDFLARE_DNS_API_TOKEN:?err}
+    ports:
+      - ${REVERSE_PROXY_PORT_HTTP:?err}:80
+      - ${REVERSE_PROXY_PORT_HTTPS:?err}:443
+      - ${WEBUI_PORT_TRAEFIK:?err}:8080
+      - ${METRICS_PORT_TRAEFIK:?err}:8082
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${FOLDER_FOR_DATA:?err}/logs/traefik:/var/log
+      - ${FOLDER_FOR_DATA:?err}/traefik:/etc/traefik
+      - ${FOLDER_FOR_DATA:?err}/traefik/letsencrypt:/letsencrypt
+    labels:
+      - traefik.enable=true
+    # ROUTERS
+      - traefik.http.routers.traefik.service=api@internal
+      - traefik.http.routers.traefik.rule=Host(`traefik.${CLOUDFLARE_DNS_ZONE:?err}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      - traefik.http.routers.traefik.entrypoints=secureweb
+      - traefik.http.routers.traefik.middlewares=authentik-forwardauth@file,security-headers@file,traefik-bouncer@file
+    # SERVICES
+      - traefik.http.services.traefik.loadbalancer.server.scheme=http
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
+    # MIDDLEWARES
+
+###########################################################################
+###########################################################################
+##
+##  Docker Compose File: Traefik Certificate Dumper
+##  Function: Dump SSL / TLS Certificates from Traefik
+##
+##  Documentation: https://hub.docker.com/r/ldez/traefik-certs-dumper
+##
+###########################################################################
+###########################################################################
+  traefik-certs-dumper:
+    image: ldez/traefik-certs-dumper:latest
+    container_name: traefik-certs-dumper
+    restart: always
+    networks:
+      - mediastack
+    user: ${PUID:?err}:${PGID:?err}
+    entrypoint: sh -c '
+      while ! [ -e /data/acme.json ]
+      || ! [ `jq ".[] | .Certificates | length" /data/acme.json | jq -s "add" ` != 0 ]; do
+      sleep 1
+      ; done
+      && traefik-certs-dumper file --version v2 --watch
+      --source /data/acme.json --dest /certs'
+    volumes:
+      - ${FOLDER_FOR_DATA:?err}/traefik/letsencrypt:/data:ro
+      - ${FOLDER_FOR_DATA:?err}/traefik-certs-dumper:/certs
+
+networks:
+  mediastack:
+    external: true

@@ -371,7 +371,7 @@ services:
 
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: Grafana
 ##  Function: Visual Monitoring Dashboard
 ##
@@ -409,7 +409,7 @@ services:
 
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: Headscale
 ##  Function: OpenSource Tailscale Coordination Server
 ##
@@ -513,7 +513,7 @@ services:
 
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: Gluetun (qmcgaw)
 ##  Function: VPN Client
 ##
@@ -573,7 +573,7 @@ services:
 
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: Bazarr (LinuxServer.io)
 ##  Function: Download subtitles for Radarr and Sonarr
 ##
@@ -610,7 +610,7 @@ services:
 
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: Chromium (LinuxServer.io)
 ##  Function: OpenSource Web Browser
 ##
@@ -650,7 +650,7 @@ services:
 
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: DDNS-Updater (qmcgaw)
 ##  Function: Update Dynamic IP addresses for DNS A and/or AAAA records
 ##
@@ -707,7 +707,7 @@ services:
 
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: Filebot (GitHub)
 ##  Function: Lookup and Rename Media from Internet Databases
 ##
@@ -747,7 +747,7 @@ services:
 
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: Flaresolverr (Flaresolverr)
 ##  Function: Cloudflare Proxy Server
 ##
@@ -780,7 +780,7 @@ services:
 
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: Heimdall (LinuxServer.io)
 ##  Function: Organise links to web sites and web applications
 ##
@@ -818,7 +818,7 @@ services:
       
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: Homarr (https://ghcr.io/)
 ##  Function: Application Dashboard
 ##
@@ -859,7 +859,7 @@ services:
 
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: Homepage (https://ghcr.io/)
 ##  Function: Application Dashboard
 ##
@@ -897,7 +897,7 @@ services:
 
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: Huntarr
 ##  Function: ARR Missing Content Manager
 ##
@@ -1044,7 +1044,7 @@ services:
 
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: Mylar3 (LinuxServer.io)
 ##  Function: Comic Library Manager
 ##
@@ -1391,7 +1391,7 @@ services:
 
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: Tdarr V2 (haveagitgat/tdarr)
 ##  Function: Tdarr V2 - Audio/Video library transcoding automation
 ##            (Contains Tdarr_Server and WebUI ) 
@@ -1457,7 +1457,7 @@ services:
 
 ###########################################################################
 ###########################################################################
-##
+##  V
 ##  Docker Compose File: Unpackerr (Hotio.Dev)
 ##  Function: Archive Media Extraction
 ##
@@ -1623,7 +1623,7 @@ services:
 ###########################################################################
 ###########################################################################
   whisparr:
-    image: hotio/whisparr:nightly
+    image: hotio/whisparr:latest
     container_name: whisparr
     restart: unless-stopped
     volumes:

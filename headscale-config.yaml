@@ -10,7 +10,7 @@
 #
 # https://myheadscale.example.com:443
 #
-server_url: https://headscale.trommel.org
+server_url: https://headscale.example.com
 
 # Address to listen to / bind to on the server
 #
@@ -196,10 +196,10 @@ database:
 acme_url: https://acme-v02.api.letsencrypt.org/directory
 
 # Email to register with ACME provider
-acme_email: "sd.trommel@gmail.com"
+acme_email: ""
 
 # Domain name to request a TLS certificate for:
-tls_letsencrypt_hostname: "trommel.org"
+tls_letsencrypt_hostname: ""
 
 # Path to store certificates and metadata needed by
 # letsencrypt

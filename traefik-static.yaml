@@ -3,11 +3,11 @@
 #
 # Filename: traefik.yaml        Traefik Static Configuration File
 #
-# Replace all "example.com" values with your domain name
+# Replace all "trommel.org" values with your domain name
 #
-#  i.e.   - main: example.com
+#  i.e.   - main: trommel.org
 #           sans:
-#             - "*.example.com"
+#             - "*.trommel.org"
 #
 #########################################################################
 #########################################################################
@@ -43,9 +43,9 @@ entryPoints:
         options: default
         certResolver: letsencrypt
         domains:
-          - main: example.com
+          - main: trommel.org
             sans:
-              - "*.example.com"
+              - "*.trommel.org"
   metrics:
     address: :8082
 

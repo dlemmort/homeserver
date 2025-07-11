@@ -3,11 +3,11 @@
 #
 # Filename: internal.yaml        Traefik Internal Web Services Configuration File
 #
-# Replace all "example.com" values with your domain name
+# Replace all "trommel.org" values with your domain name
 #
-#  i.e.   - main: example.com
+#  i.e.   - main: trommel.org
 #           sans:
-#             - "*.example.com"
+#             - "*.trommel.org"
 #
 #########################################################################
 #########################################################################
@@ -15,7 +15,7 @@
 http:
   routers:
     synology:                                # Synology DSM
-      rule: "Host(`synology.example.com`)"
+      rule: "Host(`synology.trommel.org`)"
       service: synology
       entryPoints:
         - secureweb
@@ -27,7 +27,7 @@ http:
         - traefik-bouncer@file
 
     gateway:                                 # Ubiquiti Dream Machine
-      rule: "Host(`gateway.example.com`)"
+      rule: "Host(`gateway.trommel.org`)"
       service: gateway
       entryPoints:
         - secureweb
@@ -49,7 +49,7 @@ http:
     gateway:
       loadBalancer:
         servers:
-          - url: "https://192.168.154.1"        # Ubiquiti Web UI - HTTPS
+          - url: "https://192.168.1.1"        # Ubiquiti Web UI - HTTPS
         passHostHeader: true
         serversTransport: insecure-no-verify
 

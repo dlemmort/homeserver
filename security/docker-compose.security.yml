@@ -36,8 +36,8 @@ services:
       - AUTHENTIK_EMAIL__FROM=${EMAIL_SENDER}
       - AUTHENTIK_EMAIL__TIMEOUT=10
     volumes:
-      - ${FOLDER_FOR_DATA:?err}/authentik/media:/media
-      - ${FOLDER_FOR_DATA:?err}/authentik/templates:/templates
+      - ${FOLDER_FOR_CONFIG:?err}/authentik/media:/media
+      - ${FOLDER_FOR_CONFIG:?err}/authentik/templates:/templates
     ports:
       - ${WEBUI_PORT_AUTHENTIK:?err}:9000
     depends_on:
@@ -79,9 +79,9 @@ services:
       - AUTHENTIK_ERROR_REPORTING__ENABLED=${AUTHENTIK_ERROR_REPORTING__ENABLED:?err}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${FOLDER_FOR_DATA:?err}/authentik/certs:/certs
-      - ${FOLDER_FOR_DATA:?err}/authentik/media:/media
-      - ${FOLDER_FOR_DATA:?err}/authentik/templates:/templates
+      - ${FOLDER_FOR_CONFIG:?err}/authentik/certs:/certs
+      - ${FOLDER_FOR_CONFIG:?err}/authentik/media:/media
+      - ${FOLDER_FOR_CONFIG:?err}/authentik/templates:/templates
     depends_on:
       postgresql:
         condition: service_healthy
@@ -116,6 +116,6 @@ services:
     depends_on:
       - traefik
     volumes:
-      - ${FOLDER_FOR_DATA:?err}/crowdsec:/etc/crowdsec
-      - ${FOLDER_FOR_DATA:?err}/crowdsec/data:/var/lib/crowdsec/data/
-      - ${FOLDER_FOR_DATA:?err}/logs:/logs:ro
+      - ${FOLDER_FOR_CONFIG:?err}/crowdsec:/etc/crowdsec
+      - ${FOLDER_FOR_CONFIG:?err}/crowdsec/data:/var/lib/crowdsec/data/
+      - ${FOLDER_FOR_CONFIG:?err}/logs:/logs:ro

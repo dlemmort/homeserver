@@ -21,7 +21,7 @@ services:
     ports:
       - 127.0.0.1:${WEBUI_PORT_PROMETHEUS:?err}:9090
     volumes:
-      - ${FOLDER_FOR_DATA:?err}/prometheus:/prometheus
+      - ${FOLDER_FOR_CONFIG:?err}/prometheus:/prometheus
     environment:
       - TZ=${TIMEZONE:?err}
     labels:

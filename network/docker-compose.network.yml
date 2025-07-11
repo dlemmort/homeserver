@@ -27,9 +27,9 @@ services:
       - ${METRICS_PORT_TRAEFIK:?err}:8082
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${FOLDER_FOR_DATA:?err}/logs/traefik:/var/log
-      - ${FOLDER_FOR_DATA:?err}/traefik:/etc/traefik
-      - ${FOLDER_FOR_DATA:?err}/traefik/letsencrypt:/letsencrypt
+      - ${FOLDER_FOR_CONFIG:?err}/logs/traefik:/var/log
+      - ${FOLDER_FOR_CONFIG:?err}/traefik:/etc/traefik
+      - ${FOLDER_FOR_CONFIG:?err}/traefik/letsencrypt:/letsencrypt
     labels:
       - traefik.enable=true
     # ROUTERS
@@ -67,8 +67,8 @@ services:
       && traefik-certs-dumper file --version v2 --watch
       --source /data/acme.json --dest /certs'
     volumes:
-      - ${FOLDER_FOR_DATA:?err}/traefik/letsencrypt:/data:ro
-      - ${FOLDER_FOR_DATA:?err}/traefik-certs-dumper:/certs
+      - ${FOLDER_FOR_CONFIG:?err}/traefik/letsencrypt:/data:ro
+      - ${FOLDER_FOR_CONFIG:?err}/traefik-certs-dumper:/certs
 
 
 ###########################################################################
@@ -92,8 +92,8 @@ services:
       - ${CONNECT_PORT_HEADSCALE:?err}:8080
       - ${METRICS_PORT_HEADSCALE:?err}:9090
     volumes:
-      - ${FOLDER_FOR_DATA:?err}/headscale:/etc/headscale
-      - ${FOLDER_FOR_DATA:?err}/headscale/data:/var/lib/headscale
+      - ${FOLDER_FOR_CONFIG:?err}/headscale:/etc/headscale
+      - ${FOLDER_FOR_CONFIG:?err}/headscale/data:/var/lib/headscale
     environment:
       - TZ=${TIMEZONE:?err}
     labels:
@@ -131,7 +131,7 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
-      - ${FOLDER_FOR_DATA:?err}/tailscale:/var/lib/tailscale
+      - ${FOLDER_FOR_CONFIG:?err}/tailscale:/var/lib/tailscale
     environment:
       - TS_USERSPACE=false
       - TS_STATE_DIR=/var/lib/tailscale
@@ -158,9 +158,9 @@ services:
       - ${WEBUI_PORT_HEADPLANE:?err}:3000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ${FOLDER_FOR_DATA:?err}/headscale:/etc/headscale
-      - ${FOLDER_FOR_DATA:?err}/headplane:/etc/headplane
-      - ${FOLDER_FOR_DATA:?err}/headplane/data:/var/lib/headplane
+      - ${FOLDER_FOR_CONFIG:?err}/headscale:/etc/headscale
+      - ${FOLDER_FOR_CONFIG:?err}/headplane:/etc/headplane
+      - ${FOLDER_FOR_CONFIG:?err}/headplane/data:/var/lib/headplane
     environment:
       - TZ=${TIMEZONE:?err}
     labels:
@@ -206,7 +206,7 @@ services:
       - ${QBIT_PORT:?err}:6881                # Transmission Torrent Port
 
     volumes:
-      - ${FOLDER_FOR_DATA:?err}/gluetun:/gluetun
+      - ${FOLDER_FOR_CONFIG:?err}/gluetun:/gluetun
     environment:
       - PUID=${PUID:?err}
       - PGID=${PGID:?err}

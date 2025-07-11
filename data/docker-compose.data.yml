@@ -27,4 +27,4 @@ services:
       retries: 5
       timeout: 3s
     volumes:
-      - ${FOLDER_FOR_DATA:?err}/valkey:/data
+      - ${FOLDER_FOR_CONFIG:?err}/valkey:/data
